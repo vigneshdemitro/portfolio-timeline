@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import type { Metadata } from 'next';
 import {
   GraduationCap, Code2, Layers, Star, PencilRuler,
@@ -9,13 +11,11 @@ import { ScrollReveal } from './components/ScrollReveal';
 import { BackToTop } from './components/BackToTop';
 import type { TimelineEntry } from './types';
 
-// Icon map lives here now — page owns dot rendering
 const iconMap: Record<string, React.ElementType> = {
   GraduationCap, Code2, Layers, Star, PencilRuler,
   Ruler, Zap, Terminal, Award,
 };
 
-// Dot config — gradient bg via inline style, ring glow per type
 const dotConfig = {
   work:      { dot: 'bg-gradient-to-br from-indigo-400 to-blue-500',   ring: 'ring-indigo-500/30',   shadow: 'shadow-indigo-500/40'  },
   education: { dot: 'bg-gradient-to-br from-violet-400 to-purple-600', ring: 'ring-violet-500/30',   shadow: 'shadow-violet-500/40'  },
