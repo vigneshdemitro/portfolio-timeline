@@ -1,26 +1,105 @@
 @import "tailwindcss";
 
+/* 🔑 Tailwind v4: theme is configured here in CSS, not in tailwind.config.js
+   @theme inline maps CSS variables → Tailwind utility classes             */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #020617;  /* slate-950 — always dark, no light mode */
+  --foreground: #f1f5f9;  /* slate-100 */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-inter);
 }
 
 body {
   background: var(--background);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Pulsing glow for the active role dot ─────────────────────── */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.6); }
+  50%       { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+}
+
+.dot-active {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ── Scroll reveal animations ─────────────────────────────────── */
+@keyframes reveal-from-left {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes reveal-from-right {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes reveal-from-bottom {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Base: hidden until .revealed is added by IntersectionObserver */
+.reveal-left,
+.reveal-right,
+.reveal-up {
+  opacity: 0;
+}
+
+.reveal-left.revealed {
+  animation: reveal-from-left 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.reveal-right.revealed {
+  animation: reveal-from-right 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.reveal-up.revealed {
+  animation: reveal-from-bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Shimmer sweep for footer name ───────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #94a3b8 0%,
+    #f8fafc 40%,
+    #60a5fa 55%,
+    #c084fc 70%,
+    #94a3b8 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ── Gradient spine ───────────────────────────────────────────── */
+.spine-gradient {
+  background: linear-gradient(
+    to bottom,
+    rgba(59, 130, 246, 0.6),
+    rgba(139, 92, 246, 0.6),
+    rgba(168, 85, 247, 0.4),
+    rgba(251, 191, 36, 0.3)
+  );
 }
