@@ -17,6 +17,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Career Timeline — Vigneshwar Pasupathi',
   description: 'A chronological career journey from graduation to present.',
+  icons: { icon: '/favicon.svg' },
 };
 
 export default function RootLayout({
