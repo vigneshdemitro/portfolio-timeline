@@ -7,25 +7,31 @@ import { formatDateRange, formatTimelineDate } from '../lib/utils';
 
 const typeConfig = {
   work: {
-    label:  'text-blue-400',
-    border: 'border-slate-800/60 hover:border-blue-500/40',
-    org:    'text-slate-100',
-    accent: 'from-blue-500 to-cyan-500',
-    glow:   'hover:shadow-blue-500/10',
+    label:   'text-indigo-300',
+    border:  'border-indigo-500/20 hover:border-indigo-400/50',
+    org:     'text-slate-100',
+    shine:   'via-indigo-400/60',
+    corner:  'bg-indigo-500',
+    badge:   'bg-indigo-500/10 text-indigo-300 border-indigo-500/20',
+    divider: 'border-indigo-500/10',
   },
   education: {
-    label:  'text-purple-400',
-    border: 'border-slate-800/60 hover:border-purple-500/40',
-    org:    'text-purple-300/80',
-    accent: 'from-purple-500 to-pink-500',
-    glow:   'hover:shadow-purple-500/10',
+    label:   'text-violet-300',
+    border:  'border-violet-500/20 hover:border-violet-400/50',
+    org:     'text-violet-200/80',
+    shine:   'via-violet-400/60',
+    corner:  'bg-violet-500',
+    badge:   'bg-violet-500/10 text-violet-300 border-violet-500/20',
+    divider: 'border-violet-500/10',
   },
   milestone: {
-    label:  'text-amber-400',
-    border: 'border-slate-800/60 hover:border-amber-500/40',
-    org:    'text-amber-300/80',
-    accent: 'from-amber-400 to-orange-500',
-    glow:   'hover:shadow-amber-500/10',
+    label:   'text-amber-300',
+    border:  'border-amber-500/20 hover:border-amber-400/50',
+    org:     'text-amber-200/80',
+    shine:   'via-amber-400/60',
+    corner:  'bg-amber-400',
+    badge:   'bg-amber-500/10 text-amber-300 border-amber-500/20',
+    divider: 'border-amber-500/10',
   },
 };
 
@@ -38,16 +44,19 @@ export function TimelineItem({ entry, isActive = false }: TimelineItemProps) {
   const config = typeConfig[entry.type];
 
   return (
-    <div className={`relative bg-slate-900/80 backdrop-blur-sm border ${config.border} rounded-2xl p-5 transition-all duration-300 hover:shadow-xl ${config.glow} overflow-hidden`}>
+    <div className={`glass-card relative border ${config.border} rounded-2xl p-6 transition-all duration-500 hover:shadow-2xl overflow-hidden group`}>
 
-      {/* Colored left accent bar */}
-      <div className={`absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b ${config.accent} rounded-l-2xl`} />
+      {/* Top shine line — gradient sweep */}
+      <div className={`absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent ${config.shine} to-transparent`} />
+
+      {/* Corner radial glow — appears on hover */}
+      <div className={`absolute -top-12 -right-12 w-36 h-36 ${config.corner} rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-700`} />
 
       {/* Date + Current badge */}
-      <div className={`flex items-center gap-2 text-xs font-semibold ${config.label} mb-3 uppercase tracking-wider`}>
+      <div className={`flex items-center gap-2 text-xs font-semibold ${config.label} mb-4 uppercase tracking-widest`}>
         {formatTimelineDate(entry.date)}
         {isActive && (
-          <span className="normal-case tracking-normal font-medium bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded-full">
+          <span className="normal-case tracking-normal font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">
             Current
           </span>
         )}
@@ -56,19 +65,19 @@ export function TimelineItem({ entry, isActive = false }: TimelineItemProps) {
       {/* ── WORK ──────────────────────────────────────── */}
       {entry.type === 'work' && entry.positions && (
         <>
-          <h3 className="text-base font-bold text-slate-100 mb-1">{entry.organization}</h3>
+          <h3 className="text-lg font-bold text-white mb-1 tracking-tight">{entry.organization}</h3>
           {entry.location && (
-            <div className="flex items-center gap-1 text-xs text-slate-500 mb-4">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-5">
               <MapPin size={11} /> {entry.location}
             </div>
           )}
           <div className="space-y-5">
             {entry.positions.map((pos, i) => (
-              <div key={i} className={i > 0 ? 'border-t border-slate-800/80 pt-5' : ''}>
+              <div key={i} className={i > 0 ? `border-t ${config.divider} pt-5` : ''}>
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="flex flex-wrap items-center gap-2">
                     {pos.isPromotion && (
-                      <span className="flex items-center gap-1 text-xs bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded-full shrink-0">
+                      <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full shrink-0">
                         <TrendingUp size={10} /> Promoted
                       </span>
                     )}
@@ -88,15 +97,15 @@ export function TimelineItem({ entry, isActive = false }: TimelineItemProps) {
       {/* ── EDUCATION ─────────────────────────────────── */}
       {entry.type === 'education' && (
         <>
-          <h3 className="text-base font-bold text-slate-100 mb-1">{entry.title}</h3>
+          <h3 className="text-lg font-bold text-white mb-1 tracking-tight">{entry.title}</h3>
           {entry.organization && <p className={`text-sm ${config.org} mb-1`}>{entry.organization}</p>}
-          <div className="flex flex-wrap items-center gap-3 mt-1 mb-3">
+          <div className="flex flex-wrap items-center gap-3 mt-1 mb-4">
             {entry.location && (
-              <span className="flex items-center gap-1 text-xs text-slate-500">
+              <span className="flex items-center gap-1.5 text-xs text-slate-500">
                 <MapPin size={11} /> {entry.location}
               </span>
             )}
-            <span className="flex items-center gap-1 text-xs text-slate-500">
+            <span className="flex items-center gap-1.5 text-xs text-slate-500">
               <Calendar size={11} /> {formatDateRange(entry.date, entry.endDate ?? null)}
             </span>
           </div>
@@ -107,10 +116,10 @@ export function TimelineItem({ entry, isActive = false }: TimelineItemProps) {
       {/* ── MILESTONE ─────────────────────────────────── */}
       {entry.type === 'milestone' && (
         <>
-          <h3 className="text-base font-bold text-slate-100 mb-1">{entry.title}</h3>
+          <h3 className="text-lg font-bold text-white mb-1 tracking-tight">{entry.title}</h3>
           {entry.organization && <p className={`text-sm ${config.org} mb-1`}>{entry.organization}</p>}
           {entry.location && (
-            <div className="flex items-center gap-1 text-xs text-slate-500 mb-3">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-4">
               <MapPin size={11} /> {entry.location}
             </div>
           )}

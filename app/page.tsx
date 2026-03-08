@@ -6,6 +6,7 @@ import {
 import { getTimelineData } from './lib/timeline-data';
 import { TimelineItem } from './components/TimelineItem';
 import { ScrollReveal } from './components/ScrollReveal';
+import { BackToTop } from './components/BackToTop';
 import type { TimelineEntry } from './types';
 
 // Icon map lives here now — page owns dot rendering
@@ -14,11 +15,11 @@ const iconMap: Record<string, React.ElementType> = {
   Ruler, Zap, Terminal, Award,
 };
 
-// Dot color per type — used for the spine dots in the zig-zag
+// Dot config — gradient bg via inline style, ring glow per type
 const dotConfig = {
-  work:      { dot: 'bg-blue-500',   ring: 'ring-blue-500/20'   },
-  education: { dot: 'bg-purple-500', ring: 'ring-purple-500/20' },
-  milestone: { dot: 'bg-amber-500',  ring: 'ring-amber-500/20'  },
+  work:      { dot: 'bg-gradient-to-br from-indigo-400 to-blue-500',   ring: 'ring-indigo-500/30',   shadow: 'shadow-indigo-500/40'  },
+  education: { dot: 'bg-gradient-to-br from-violet-400 to-purple-600', ring: 'ring-violet-500/30',   shadow: 'shadow-violet-500/40'  },
+  milestone: { dot: 'bg-gradient-to-br from-amber-300 to-orange-500',  ring: 'ring-amber-500/30',    shadow: 'shadow-amber-500/40'   },
 };
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -48,31 +49,38 @@ export default async function TimelinePage() {
       <div className="max-w-5xl mx-auto">
 
         {/* ── Header ─────────────────────────────────────── */}
-        <div className="mb-12 text-center">
-          <p className="text-sm text-slate-500 mb-2 uppercase tracking-widest font-medium">
+        <div className="mb-16 text-center">
+          {/* Pill badge */}
+          <div className="inline-flex items-center gap-2 text-xs font-medium text-slate-400 bg-white/[0.04] border border-white/[0.08] rounded-full px-4 py-1.5 mb-8 tracking-wider backdrop-blur-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             Professional Journey
-          </p>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-3">
-            Timeline
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-5 bg-gradient-to-r from-indigo-300 via-sky-200 to-violet-300 bg-clip-text text-transparent">
+            Career Timeline
           </h1>
-          <p className="text-slate-400 text-sm max-w-lg mx-auto">{meta.siteDescription}</p>
+          <p className="text-slate-400 text-base max-w-md mx-auto leading-relaxed">{meta.siteDescription}</p>
         </div>
 
-        {/* ── Stats ──────────────────────────────────────── */}
+        {/* ── Stats — minimal bold numbers ───────────────── */}
         <ScrollReveal direction="up" delay={100}>
           {(() => {
             const currentYear = new Date().getFullYear();
             const totalYears = currentYear - meta.careerStartYear;
-            const itYears = currentYear - meta.softwareCareerStartYear;
+            const itYears    = currentYear - meta.softwareCareerStartYear;
             return (
-              <div className="grid grid-cols-2 gap-4 mb-16 max-w-xs mx-auto">
-                <div className="bg-slate-900/80 backdrop-blur-sm border border-slate-800/60 rounded-xl p-5 text-center hover:border-purple-500/30 transition-colors">
-                  <div className="text-3xl font-bold text-purple-400">{totalYears}<span className="text-lg text-purple-400/70">+ yr</span></div>
-                  <div className="text-xs text-slate-500 mt-1">Total experience</div>
+              <div className="flex items-center justify-center gap-10 mb-20">
+                <div className="text-center">
+                  <div className="text-5xl font-bold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent leading-none">
+                    {totalYears}<span className="text-3xl">+</span>
+                  </div>
+                  <div className="text-xs text-slate-500 mt-2 uppercase tracking-widest">Years experience</div>
                 </div>
-                <div className="bg-slate-900/80 backdrop-blur-sm border border-slate-800/60 rounded-xl p-5 text-center hover:border-cyan-500/30 transition-colors">
-                  <div className="text-3xl font-bold text-cyan-400">{itYears}<span className="text-lg text-cyan-400/70">+ yr</span></div>
-                  <div className="text-xs text-slate-500 mt-1">In software</div>
+                <div className="w-px h-12 bg-gradient-to-b from-transparent via-slate-600 to-transparent" />
+                <div className="text-center">
+                  <div className="text-5xl font-bold bg-gradient-to-r from-sky-400 to-cyan-300 bg-clip-text text-transparent leading-none">
+                    {itYears}<span className="text-3xl">+</span>
+                  </div>
+                  <div className="text-xs text-slate-500 mt-2 uppercase tracking-widest">Years in software</div>
                 </div>
               </div>
             );
@@ -105,8 +113,8 @@ export default async function TimelinePage() {
 
                     {/* ── MOBILE: single column left-aligned ── */}
                     <div className="md:hidden pl-12">
-                      <div className={`absolute left-0.5 top-3 w-7 h-7 rounded-full ${config.dot} ring-4 ${config.ring} flex items-center justify-center ${active ? 'dot-active' : ''}`}>
-                        <Icon size={13} className="text-white" />
+                      <div className={`absolute left-0.5 top-3 w-7 h-7 rounded-full ${config.dot} ring-4 ${config.ring} shadow-lg ${config.shadow} flex items-center justify-center ${active ? 'dot-active' : ''}`}>
+                        <Icon size={13} className="text-white drop-shadow" />
                       </div>
                       <TimelineItem entry={entry} isActive={active} />
                     </div>
@@ -125,9 +133,9 @@ export default async function TimelinePage() {
                       </div>
 
                       {/* Center dot — sits on the spine */}
-                      <div className="w-16 flex justify-center items-start pt-4 shrink-0">
-                        <div className={`w-8 h-8 rounded-full ${config.dot} ring-4 ${config.ring} flex items-center justify-center relative z-10 ${active ? 'dot-active' : ''}`}>
-                          <Icon size={14} className="text-white" />
+                      <div className="w-16 flex justify-center items-start pt-5 shrink-0">
+                        <div className={`w-9 h-9 rounded-full ${config.dot} ring-4 ${config.ring} shadow-lg ${config.shadow} flex items-center justify-center relative z-10 ${active ? 'dot-active' : ''}`}>
+                          <Icon size={15} className="text-white drop-shadow" />
                         </div>
                       </div>
 
@@ -144,7 +152,7 @@ export default async function TimelinePage() {
 
         {/* ── Footer ─────────────────────────────────────── */}
         <ScrollReveal direction="up">
-          <div className="mt-20 pt-8 border-t border-slate-800/60 text-center space-y-3">
+          <div className="mt-24 pt-8 border-t border-white/[0.06] text-center space-y-3">
             <p className="text-2xl font-bold tracking-tight text-shimmer">
               {meta.authorName}
             </p>
@@ -159,6 +167,7 @@ export default async function TimelinePage() {
         </ScrollReveal>
 
       </div>
+      <BackToTop />
     </main>
   );
 }
