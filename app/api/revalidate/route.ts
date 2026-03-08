@@ -1,6 +1,9 @@
 export const runtime = 'edge';
 
-import { revalidatePath } from 'next/cache';
+// On Cloudflare Pages (Edge runtime), revalidatePath/revalidateTag from next/cache
+// are not supported. Content stays fresh because timeline-data.ts uses cache: 'no-store'.
+// This endpoint is kept for compatibility — it just returns a confirmation response.
+
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -10,11 +13,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: 'Invalid secret' }, { status: 401 });
   }
 
-  revalidatePath('/');
-
   return NextResponse.json({
     revalidated: true,
-    message: 'Timeline cache cleared. Fresh data on next visit.',
+    message: 'Data is fetched fresh on every request (no-store). No cache to clear.',
     timestamp: new Date().toISOString(),
   });
 }

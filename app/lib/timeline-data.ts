@@ -9,11 +9,7 @@ export async function getTimelineData(): Promise<TimelineData> {
     );
   }
 
-  const res = await fetch(url, {
-    next: {
-      revalidate: 3600, // ISR: auto re-fetch every hour as fallback
-    },
-  });
+  const res = await fetch(url, { cache: 'no-store' });
 
   if (!res.ok) {
     throw new Error(
