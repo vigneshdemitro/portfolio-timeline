@@ -1,6 +1,3 @@
-// Pure card content — no dot, no positioning.
-// The zig-zag layout + dot rendering is handled by page.tsx.
-
 import { TrendingUp, MapPin, Calendar } from 'lucide-react';
 import type { TimelineEntry } from '../types';
 import { formatDateRange, formatTimelineDate } from '../lib/utils';
@@ -46,10 +43,10 @@ export function TimelineItem({ entry, isActive = false }: TimelineItemProps) {
   return (
     <div className={`glass-card relative border ${config.border} rounded-2xl p-6 transition-all duration-500 hover:shadow-2xl overflow-hidden group`}>
 
-      {/* Top shine line — gradient sweep */}
+      {/* Top shine line */}
       <div className={`absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent ${config.shine} to-transparent`} />
 
-      {/* Corner radial glow — appears on hover */}
+      {/* Corner radial glow */}
       <div className={`absolute -top-12 -right-12 w-36 h-36 ${config.corner} rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-700`} />
 
       {/* Date + Current badge */}
@@ -62,7 +59,7 @@ export function TimelineItem({ entry, isActive = false }: TimelineItemProps) {
         )}
       </div>
 
-      {/* ── WORK ──────────────────────────────────────── */}
+      {/* WORK */}
       {entry.type === 'work' && entry.positions && (
         <>
           <h3 className="text-lg font-bold text-white mb-1 tracking-tight">{entry.organization}</h3>
@@ -94,7 +91,7 @@ export function TimelineItem({ entry, isActive = false }: TimelineItemProps) {
         </>
       )}
 
-      {/* ── EDUCATION ─────────────────────────────────── */}
+      {/* EDUCATION */}
       {entry.type === 'education' && (
         <>
           <h3 className="text-lg font-bold text-white mb-1 tracking-tight">{entry.title}</h3>
@@ -113,7 +110,7 @@ export function TimelineItem({ entry, isActive = false }: TimelineItemProps) {
         </>
       )}
 
-      {/* ── MILESTONE ─────────────────────────────────── */}
+      {/* MILESTONE */}
       {entry.type === 'milestone' && (
         <>
           <h3 className="text-lg font-bold text-white mb-1 tracking-tight">{entry.title}</h3>

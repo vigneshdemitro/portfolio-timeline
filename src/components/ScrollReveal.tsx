@@ -1,14 +1,9 @@
-'use client';
-
-// Intersection Observer wrapper — fades/slides children into view on scroll.
-// direction controls which keyframe animation is applied.
-
 import { useEffect, useRef, useState } from 'react';
 
 interface ScrollRevealProps {
   children: React.ReactNode;
   direction?: 'left' | 'right' | 'up';
-  delay?: number; // ms
+  delay?: number;
   className?: string;
 }
 
@@ -29,7 +24,7 @@ export function ScrollReveal({
       ([entry]) => {
         if (entry.isIntersecting) {
           setVisible(true);
-          observer.unobserve(el); // only animate once
+          observer.unobserve(el);
         }
       },
       { threshold: 0.12 }
