@@ -69,16 +69,16 @@ export function TimelineItem({ entry, isActive = false }: TimelineItemProps) {
             </div>
           )}
           <div className="space-y-5">
-            {entry.positions.map((pos, i) => (
+            {[...entry.positions].reverse().map((pos, i, arr) => (
               <div key={i} className={i > 0 ? `border-t ${config.divider} pt-5` : ''}>
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="flex flex-wrap items-center gap-2">
-                    {pos.isPromotion && (
+                    <h4 className="text-sm font-semibold text-slate-200">{pos.title}</h4>
+                    {i < arr.length - 1 && (
                       <span className="flex items-center gap-1 text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full shrink-0">
-                        <TrendingUp size={10} /> Promoted
+                        <TrendingUp size={11} /> Promoted
                       </span>
                     )}
-                    <h4 className="text-sm font-semibold text-slate-200">{pos.title}</h4>
                   </div>
                   <span className="flex items-center gap-1 text-xs text-slate-500 shrink-0">
                     <Calendar size={10} /> {formatDateRange(pos.startDate, pos.endDate)}
